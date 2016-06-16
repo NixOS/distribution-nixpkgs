@@ -1,5 +1,6 @@
 module Main ( main ) where
 
+import Build_spec (deps)
 import Control.DeepSeq
 import Control.Exception
 import Control.Lens
@@ -14,7 +15,11 @@ main :: IO ()
 main = do
   distDir <- fromMaybe "dist" `fmap` lookupEnv "HASKELL_DIST_DIR"
   let cabalMacrosHeader = distDir ++ "/build/autogen/cabal_macros.h"
-  doctest [ "-isrc", "-optP-include", "-optP"++cabalMacrosHeader, "src" ]
+  doctest $ [ "-isrc"
+            , "-optP-include"
+            , "-optP"++cabalMacrosHeader
+            , "-hide-all-packages"
+            ] ++ map ("-package="++) deps ++ ["src"]
 
   hspec $
     describe "DeepSeq instances work properly for" $ do
