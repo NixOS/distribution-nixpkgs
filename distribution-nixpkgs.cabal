@@ -13,7 +13,7 @@ maintainer:     Peter Simons <simons@cryp.to>
 license:        BSD3
 license-file:   LICENSE
 tested-with:    GHC > 7.10 && < 8.1
-build-type:     Simple
+build-type:     Custom
 cabal-version:  >= 1.10
 
 source-repository head
