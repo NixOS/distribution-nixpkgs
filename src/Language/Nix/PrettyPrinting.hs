@@ -22,6 +22,7 @@ import Data.List
 import Data.Set ( Set )
 import qualified Data.Set as Set
 import Distribution.Text ( Text, disp )
+import Prelude hiding ((<>))
 import "pretty" Text.PrettyPrint.HughesPJClass
 
 attr :: String -> Doc -> Doc
