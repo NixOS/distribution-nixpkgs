@@ -24,6 +24,7 @@ import GHC.Generics ( Generic )
 import Internal.OrphanInstances ( )
 import Language.Nix.Identifier
 import Language.Nix.PrettyPrinting
+import Prelude hiding ((<>))
 
 -- | A representation of the @meta@ section used in Nix expressions.
 --
