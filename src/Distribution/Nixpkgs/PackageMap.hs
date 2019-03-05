@@ -1,5 +1,6 @@
 module Distribution.Nixpkgs.PackageMap
   ( PackageMap, readNixpkgPackageMap
+  , readNixpkgPackageMapWithArgs
   , resolve
   ) where
 
@@ -21,11 +22,14 @@ import Control.Lens
 type PackageMap = Map Identifier (Set Path)
 
 readNixpkgPackageMap :: FilePath -> Maybe Path -> IO PackageMap
-readNixpkgPackageMap nixpkgs attrpath = fmap identifierSet2PackageMap (readNixpkgSet nixpkgs attrpath)
+readNixpkgPackageMap nixpkgs attrpath = readNixpkgPackageMapWithArgs nixpkgs attrpath Map.empty
 
-readNixpkgSet :: FilePath -> Maybe Path -> IO (Set String)
-readNixpkgSet nixpkgs attrpath = do
-  let extraArgs = maybe [] (\p -> ["-A", display p]) attrpath
+readNixpkgPackageMapWithArgs :: FilePath -> Maybe Path -> Map String String -> IO PackageMap
+readNixpkgPackageMapWithArgs nixpkgs attrpath args = fmap identifierSet2PackageMap (readNixpkgSet nixpkgs attrpath args)
+
+readNixpkgSet :: FilePath -> Maybe Path -> Map String String -> IO (Set String)
+readNixpkgSet nixpkgs attrpath args = do
+  let extraArgs = maybe [] (\p -> ["-A", display p]) attrpath ++ concatMap (\(k,v) -> ["--arg", k, v]) (Map.toList args)
   (_, Just h, _, _) <- createProcess (proc "nix-env" (["-qaP", "--json", "-f", nixpkgs] ++ extraArgs))
                        { std_out = CreatePipe, env = Nothing }  -- TODO: ensure that overrides don't screw up our results
   buf <- LBS.hGetContents h
