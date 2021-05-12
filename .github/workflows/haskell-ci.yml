@@ -45,6 +45,13 @@ jobs:
           apt-get install -y $CC cabal-install-3.4
         env:
           CC: ${{ matrix.compiler }}
+      - name: Prerequisites for install-nix-action
+        run: |
+          apt-get install -y --no-install-recommends sudo
+          echo "USER=$(whoami)" >> $GITHUB_ENV
+      - uses: cachix/install-nix-action@v13
+        with:
+          nix_path: nixpkgs=https://github.com/NixOS/nixpkgs/archive/83d907fd760d9ee4f49b4b7e4b1c6682f137b573.tar.gz
       - name: Set PATH and environment variables
         run: |
           echo "$HOME/.cabal/bin" >> $GITHUB_PATH
@@ -143,6 +150,7 @@ jobs:
         run: |
           PKGDIR_distribution_nixpkgs="$(find "$GITHUB_WORKSPACE/unpacked" -maxdepth 1 -type d -regex '.*/distribution-nixpkgs-[0-9.]*')"
           echo "PKGDIR_distribution_nixpkgs=${PKGDIR_distribution_nixpkgs}" >> $GITHUB_ENV
+          echo "distribution_nixpkgs_datadir=${PKGDIR_distribution_nixpkgs}" >> $GITHUB_ENV
           touch cabal.project
           touch cabal.project.local
           echo "packages: ${PKGDIR_distribution_nixpkgs}" >> cabal.project

@@ -28,8 +28,7 @@ type PackageMap = Map Identifier (Set Path)
 --   Note: Evaluation of nixpkgs is very expensive (takes multiple
 --   seconds), so cache the result of this function if possible.
 --
---   >>> readNixpkgPackageMap "<nixpkgs>" (Just "{ config = { allowAliases = false; }; }")
---   fromList [ … ]
+--   >>> nixpkgs <- readNixpkgPackageMap "<nixpkgs>" (Just "{ config = { allowAliases = false; }; }")
 readNixpkgPackageMap :: String
                      -- ^ Path to nixpkgs, must be a valid nix path
                      --   (absolute, relative or @NIX_PATH@ lookup)
@@ -77,6 +76,7 @@ parsePackage x
 -- | Finds the shortest 'Path' in a 'PackageMap' that has the
 --   given 'Identifier' as its last component.
 --
+--   >>> nixpkgs <- readNixpkgPackageMap "<nixpkgs>" Nothing
 --   >>> resolve nixpkgs (ident # "pam")
 --   Just (Bind (Identifier "pam") (Path [Identifier "pam"]))
 resolve :: PackageMap -> Identifier -> Maybe Binding
