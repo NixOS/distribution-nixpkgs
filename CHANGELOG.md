@@ -1,5 +1,10 @@
 # Revision history for distribution-nixpkgs
 
+## 1.6.2
+
+* Expect `MonadFailDesugaring` (or equivalent behavior) to be the default,
+  requiring GHC >= 8.6.1.
+
 ## 1.6.1
 
 * `Distribution.Nixpkgs.Meta`: support `aarch64-darwin`
