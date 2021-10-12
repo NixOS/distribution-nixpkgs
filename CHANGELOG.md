@@ -3,7 +3,7 @@
 ## 1.6.2
 
 * Expect `MonadFailDesugaring` (or equivalent behavior) to be the default,
-  requiring GHC >= 8.6.1.
+  requiring GHC >= 8.6.1. Adds support for GHC 9.2.1 (rc1).
 
 ## 1.6.1
 
